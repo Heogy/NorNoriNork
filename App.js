@@ -1,20 +1,56 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {Text, TextInput, View} from "react-native";
+import {useState} from "react";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+function findResponse({nor, nori, nork, denbora}) {
+    if(nor === 'Ni' && nori === '' && nork === 'Zuk'){
+        return 'Nauzu';
+    }
+    if(nor === 'Ni' && nori === 'Haiei' && nork === 'Zuk'){
+        return 'Dizute';
+    }
+    return 'Ezin da !';
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+    const [state, setState] = useState({
+        nor: '',
+        nori: '',
+        nork: '',
+        denbora: 'Orainaldia',
+        errantzuna: ''
+    });
+
+    const setNor = (text) => setState((prev) => {
+        const errantzuna = findResponse({...prev, nor: text})
+        console.log(errantzuna)
+        return {...prev, nor: text, errantzuna: errantzuna}
+    })
+    const setNori = (text) => setState((prev) => {
+        const errantzuna = findResponse({...prev, nori: text})
+        console.log(errantzuna)
+        return {...prev, nori: text, errantzuna: errantzuna}
+    })
+    const setNork = (text) => setState((prev) => {
+        const errantzuna = findResponse({...prev, nork: text})
+        console.log(errantzuna)
+        return {...prev, nork: text, errantzuna: errantzuna}
+    })
+    return (
+        <View style={{
+            display: 'flex',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}>
+            <TextInput placeholder={"Nor"} editable value={state.nor} onChangeText={setNor}/>
+            <TextInput placeholder={"Nori"} editable value={state.nori} onChangeText={setNori}/>
+            <TextInput placeholder={"Nork"} editable value={state.nork} onChangeText={setNork}/>
+            <TextInput placeholder={"Denbora"} editable value={state.denbora} onChangeText={text => setState((prev) => {
+                return {...prev, denbora: text}
+            })}/>
+            <Text>{state.errantzuna}</Text>
+        </View>
+    )
+}
